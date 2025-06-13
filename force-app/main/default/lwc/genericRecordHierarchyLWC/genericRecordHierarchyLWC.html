@@ -1,0 +1,22 @@
+<template>
+    <!-- Use of custom component with dynamic properties for header display -->
+    <c-generic-header-l-w-c icon-name={headerIconName} 
+                                header-name={title} 
+                                records-count={totalRecordCount}
+                                onrefreshevent={handleRefresh}>
+    </c-generic-header-l-w-c>
+    
+    <!-- Conditional rendering for spinner during data loading -->
+    <template lwc:if={showSpinner}>
+        <lightning-spinner variant="brand" 
+                           alternative-text="Processing...">
+        </lightning-spinner>
+    </template>
+
+    <!-- Display of hierarchical data in a tree grid format -->
+    <lightning-tree-grid hide-checkbox-column 
+                         data={hierarchyMap} 
+                         columns={columns} 
+                         key-field="Id">
+    </lightning-tree-grid>
+</template>

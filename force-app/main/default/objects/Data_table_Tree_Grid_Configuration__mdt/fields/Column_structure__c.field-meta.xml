@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Column_structure__c</fullName>
+    <description>JSON structured data having column details</description>
+    <fieldManageability>DeveloperControlled</fieldManageability>
+    <inlineHelpText>JSON structured data having column details</inlineHelpText>
+    <label>Column structure</label>
+    <length>131072</length>
+    <type>LongTextArea</type>
+    <visibleLines>10</visibleLines>
+</CustomField>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Header_icon_name__c</fullName>
+    <description>Holds icon name available from Lightning Design System. Click this click to choose best suited one: https://www.lightningdesignsystem.com/icons/</description>
+    <externalId>false</externalId>
+    <fieldManageability>DeveloperControlled</fieldManageability>
+    <inlineHelpText>Holds icon name available from Lightning Design System. Click this click to choose best suited one: https://www.lightningdesignsystem.com/icons/</inlineHelpText>
+    <label>Header icon name</label>
+    <length>255</length>
+    <required>false</required>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

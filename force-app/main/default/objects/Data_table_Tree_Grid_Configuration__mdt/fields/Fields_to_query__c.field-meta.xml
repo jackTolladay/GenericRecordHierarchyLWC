@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Fields_to_query__c</fullName>
+    <defaultValue>&apos;Id&apos; + &apos;,&apos; + &apos;RecordType.Name&apos;</defaultValue>
+    <description>Holds all field api names separated by comma that are included in columns</description>
+    <fieldManageability>DeveloperControlled</fieldManageability>
+    <inlineHelpText>Holds all field api names separated by comma that are included in columns</inlineHelpText>
+    <label>Fields to query</label>
+    <required>false</required>
+    <type>TextArea</type>
+</CustomField>

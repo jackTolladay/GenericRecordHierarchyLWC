@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Record_structure__c</fullName>
+    <description>Write the content of the function.
+parentThis - &apos;this&apos; object of Parent.
+fetchedRecord - Record to map.</description>
+    <fieldManageability>DeveloperControlled</fieldManageability>
+    <inlineHelpText>Write the content of the function.
+parentThis - &apos;this&apos; object of Parent.
+fetchedRecord - Record to map.</inlineHelpText>
+    <label>Record structure</label>
+    <length>32768</length>
+    <type>LongTextArea</type>
+    <visibleLines>10</visibleLines>
+</CustomField>

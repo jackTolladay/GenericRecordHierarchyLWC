@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Root_field_api_name__c</fullName>
+    <description>Holds root field api name to link root and top most record with the current record to form the hierarchy.</description>
+    <externalId>false</externalId>
+    <fieldManageability>DeveloperControlled</fieldManageability>
+    <inlineHelpText>Holds root field api name to link root and top most record with the current record to form the hierarchy.</inlineHelpText>
+    <label>Root field api name</label>
+    <length>255</length>
+    <required>true</required>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

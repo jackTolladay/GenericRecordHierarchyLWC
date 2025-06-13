@@ -1,0 +1,52 @@
+<template>
+    <!-- Main layout using lightning-layout with items spaced between -->
+    <lightning-layout horizontal-align="space-between" class="slds-theme_shade">
+        <!-- Left section of the header displays the icon and header text with item count and update details -->
+        <lightning-layout-item padding="around-small" size="6">
+            <div class="icon-section slds-text-align_center slds-m-top_xxx-small">
+                <!-- Displaying an icon (dynamically set via a property) -->
+                <lightning-icon class="main-icon" icon-name={iconName} size="small"></lightning-icon>
+                <div class="slds-grid slds-grid_vertical-align-center">
+                    <!-- Header text dynamically received from a parent component -->
+                    <span class="header slds-m-left_x-small slds-m-top-small">{headerName}</span>
+                </div>
+            </div>
+            <!-- Display item count and time since last update, dynamically updated -->
+            <p class="slds-theme_shade">{recordsCount} items • Updated {timeSinceUpdate}</p>
+        </lightning-layout-item>
+
+        <!-- Right section of the header contains action buttons such as settings, refresh, and filter -->
+        <lightning-layout-item flexibility="auto" padding="around-small" size="6">
+            <div class="slds-float_right">
+                <!-- Settings button (currently disabled) -->
+                <lightning-button-icon 
+                    disabled 
+                    class="slds-p-horizontal_xxx-small" 
+                    icon-name="utility:settings"
+                    alternative-text="Settings" 
+                    title="Settings">
+                </lightning-button-icon>
+
+                <!-- Refresh button which triggers handleRefresh method on click -->
+                <lightning-button-icon 
+                    class="slds-p-horizontal_xxx-small" 
+                    icon-name="utility:refresh"
+                    alternative-text="Refresh" 
+                    title="Refresh"
+                    onclick={handleRefresh}>
+                </lightning-button-icon>
+
+                <!-- Stateful button for filter application (currently disabled) and triggers openFilter method on click -->
+                <lightning-button-icon-stateful 
+                    disabled 
+                    class="slds-p-horizontal_xxx-small"
+                    icon-name="utility:filterList" 
+                    title="Apply filter"
+                    selected={filterApplied} 
+                    onclick={openFilter}
+                    alternative-text="Filter">
+                </lightning-button-icon-stateful>
+            </div>
+        </lightning-layout-item>
+    </lightning-layout>
+</template>
