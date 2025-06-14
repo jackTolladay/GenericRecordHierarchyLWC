@@ -1,18 +1,127 @@
-# Salesforce DX Project: Next Steps
+Hierarchy Tree Grid 
 
-Now that you’ve created a Salesforce DX project, what’s next? Here are some documentation resources to get you started.
+Hierarchy Tree Grid is a dynamic and versatile tool to facilitate hierarchical views of records within Salesforce. With Hierarchy Tree Grid, you can customize the contents of the tree grid to visualize the hierarchy from a defined root record. 
 
-## How Do You Plan to Deploy Your Changes?
+Installation 
 
-Do you want to deploy a set of changes, or create a self-contained application? Choose a [development model](https://developer.salesforce.com/tools/vscode/en/user-guide/development-models).
+Unlocked Package Installation (Sandbox) - https://test.salesforce.com/packaging/installPackage.apexp?p0=04tTA000000GrGT
 
-## Configure Your Salesforce DX Project
+Key Features 
 
-The `sfdx-project.json` file contains useful configuration information for your project. See [Salesforce DX Project Configuration](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_ws_config.htm) in the _Salesforce DX Developer Guide_ for details about this file.
+Hierarchy Tree Grid offers a range of customisation options to support your use case. 
 
-## Read All About It
+Field Customization 
 
-- [Salesforce Extensions Documentation](https://developer.salesforce.com/tools/vscode/)
-- [Salesforce CLI Setup Guide](https://developer.salesforce.com/docs/atlas.en-us.sfdx_setup.meta/sfdx_setup/sfdx_setup_intro.htm)
-- [Salesforce DX Developer Guide](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_intro.htm)
-- [Salesforce CLI Command Reference](https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference.htm)
+Select which fields you would like to display in the Tree Grid. 
+
+Header Customization 
+
+Choose which lightning design system icon you want to use 
+
+Current Record Identifier 
+
+Leverage the lightning design system icons to show where in the hierachy you are 
+
+Related List Mode 
+
+Choose to show the collected records in a related list rather than Tree Grid 
+
+Setup 
+
+Install the package. 
+
+Begin Configuration 
+
+First, create a row in the Data_table_Tree_Grid_Configuration__mdt custom metadata type. 
+
+Object and Field Names 
+
+ 
+
+[!NOTE] Ensure all the records in your hierarchy have their ultimate parent field populated with the Id for the appropriate record. 
+
+Fields to Query 
+
+Add the fields you would like to include in your Tree Grid. 
+
+ 
+
+Icons 
+
+Select the icon for the header and for the current record. Use the Lightning Design System Icon Library to select the chosen icons. 
+
+[!IMPORTANT] Be sure to include 'standard:' / 'utility:' / 'action:' / 'doctype:' before the icon name. 
+
+Column Structure 
+
+The Column structure field allows you to order the fields as you require and size them to fit in your chosen location. 
+
+[ 
+{ 
+"label": "Account Name", 
+"fieldName": "navigationUrl", 
+"initialWidth": 300, 
+"type": "url", 
+"wrapText": true, 
+"cellAttributes": { 
+"iconName": { 
+"fieldName": "dynamicIcon" 
+}, 
+"iconPosition": "right", 
+"class": { 
+"fieldName": "dynamicClass" 
+} 
+}, 
+"typeAttributes": { 
+"label": { 
+"fieldName": "Name" 
+}, 
+"variant": "base" 
+} 
+}, 
+{ 
+"type": "text", 
+"fieldName": "BillingCountry", 
+"label": "Billing Country" 
+}, 
+{ 
+"type": "text", 
+"fieldName": "OwnerName", 
+"label": "Owner" 
+} 
+] 
+  
+
+Record Structure 
+
+Define the record structure in the following example format: 
+
+let record = {}; 
+record.navigationUrl = baseUrl + '/' + fetchedRecord.Id; 
+record.dynamicIcon = parentThis.getDynamicIcon(fetchedRecord.Id); 
+record.OwnerName = fetchedRecord.Owner?.Name; 
+return record; 
+  
+
+[!WARNING] Field Traversal: Cross-object traversal, such as Owner.Name, must be mapped in record structure, it is advisable to have checks before assigning, such as 
+
+record.OwnerName = fetchedRecord.Owner?.Name 
+  
+
+Place Component 
+
+Place the component on the page layout / flow and add your Data table/Tree Grid Configuration Name for the chosen record you would like to use. 
+
+Troubleshooting & Support 
+
+· Metadata Accuracy: Ensure correctness in 'Data Table/Tree Grid Configuration' metadata record setups. 
+
+· API Name Verification: Confirm the accuracy of field API names and their hierarchical alignments. 
+
+· Support Contacts: For discrepancies or additional assistance, reach out to your Salesforce administrator or development team. 
+
+Additional Permissions: The "Generic Record Hierarchy Access" permission set has been added, providing users with access to the "Data table/Tree Grid Configuration" custom metadata type and "HierarchyController" Apex class, enhancing security while enabling robust configuration capabilities and control over hierarchy management. 
+
+Product Impact: This release underscores our commitment to enhancing user interaction and visibility of complex business hierarchies in Salesforce environments, leveraging advanced, configurable LWC technology for seamless integration and usability. 
+
+ 
