@@ -12,7 +12,8 @@
  public with sharing class HierarchyController {
     // Name of the custom metadata used for configuring this controller
     public static String customMedataName = 'Data_table_Tree_Grid_Configuration__mdt';
-    
+    public static final Integer MAX_HIERARCHY_DEPTH = 5;
+
     /**
      * Aggregates different hierarchical data retrieval functions to compile a complete hierarchy view 
      * centered around a specific record.
@@ -84,17 +85,82 @@
      * @return List of sObject representing the hierarchy records, empty if none found.
      */
     public static List<sObject> getHierarchyRecords(QueryWrapper qp, List<sObject> currentRecord){
-        qp.fieldsToQuery += ',' + qp.parentFieldApiName;
-        String selectClause = 'SELECT ' + qp.fieldsToQuery;
-        String fromClause = ' FROM ' + qp.sObjectApiName;
-        String rootRecordId = !currentRecord.isEmpty() ? (String)currentRecord[0].get(qp.rootFieldApiName) : '';
-        String whereClause = ' WHERE ' + qp.rootFieldApiName + ' = \'' + rootRecordId + '\'';
-        system.debug('selectClause='+selectClause);
-        system.debug('fromClause='+fromClause);
-        system.debug('whereClause='+whereClause);
-        return performQuery(selectClause, fromClause, whereClause); // Query to fetch hierarchical records
+
+        List<SObject> combinedHierarchy = new List<SObject>();
+
+        combinedHierarchy.addAll(getAncestorsFromLoadedRecord(qp, currentRecordList));
+        combinedHierarchy.addAll(getDescendantsFromLoadedRecords(qp, currentRecordList));
+
+        return combinedHierarchy;
     }
     
+    public static List<SObject> getAncestorsFromLoadedRecord(List<SObject> currentRecordList, QueryWrapper qp) {
+        List<SObject> ancestors = new List<SObject>();
+
+        if (currentRecordList.isEmpty()) {
+            return ancestors; // No record passed, return empty list
+        }
+
+        SObject currentRecord = currentRecordList[0];
+        Id currentParentId = (Id) currentRecord.get(qp.parentFieldApiName);
+        Integer depth = 0;
+
+        while (currentParentId != null && depth < MAX_HIERARCHY_DEPTH) {
+            String selectClause = 'SELECT ' + qp.fieldsToQuery;
+            String fromClause = ' FROM ' + qp.sObjectApiName;
+            String whereClause = ' WHERE ' + qp.parentFieldApiName + ' = \'' + currentParentId + '\'';
+
+            List<SObject> parentList = performQuery(selectClause, fromClause, whereClause);
+
+            if (parentList.isEmpty()) {
+                break; // No more parents found
+            }
+
+            SObject parentRecord = parentList[0];
+            ancestors.add(parentRecord);
+
+            currentParentId = (Id) parentRecord.get(qp.parentFieldApiName);
+            depth++;
+        }
+
+        return ancestors;
+    }
+
+    public static List<SObject> getDescendantsFromLoadedRecords(List<SObject> currentRecordList, QueryWrapper qp) {
+        List<SObject> descendants = new List<SObject>();
+        Set<Id> parentIds = new Set<Id>();
+
+        Id parentId = (Id) currentRecordList[0].get('Id');
+
+
+        Integer depth = 0;
+
+        while (!parentIds.isEmpty() && depth < MAX_HIERARCHY_DEPTH) {
+            String selectClause = 'SELECT ' + qp.fieldsToQuery;
+            String fromClause = 'FROM ' + qp.sObjectApiName;
+            String whereClause = 'WHERE ' + qp.parentFieldApiName + ' = \'' + parentId + '\'';
+
+            List<SObject> children = performQuery(selectClause, fromClause, whereClause);
+
+            if (children.isEmpty()) {
+                break;
+            }
+
+            descendants.addAll(children);
+
+            parentIds.clear();
+            for (SObject child : children) {
+                parentIds.add((Id)child.get('Id'));
+            }
+
+            depth++;
+        }
+
+        return descendants;
+    }
+
+
+
     /**
      * Retrieves custom metadata configuration for specified template.
      *
