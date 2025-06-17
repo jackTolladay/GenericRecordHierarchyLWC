@@ -73,9 +73,6 @@
         string selectClause = 'SELECT ' + qp.fieldsToQuery;
         string fromClause = ' FROM ' + qp.sObjectApiName;
         string whereClause = ' WHERE Id = \'' + qp.recordId + '\'';
-        system.debug('selectClause='+selectClause);
-        system.debug('fromClause='+fromClause);
-        system.debug('whereClause='+whereClause);
         return performQuery(selectClause, fromClause, whereClause); // Dynamic query execution to fetch current record
     }
     
@@ -140,12 +137,13 @@
 
         SObject currentRecord = currentRecordList[0];
         Id currentParentId = (Id) currentRecord.get(qp.parentFieldApiName);
-        Integer depth = 0;
 
         String selectClause = 'SELECT ' + qp.fieldsToQuery;
         String fromClause = ' FROM ' + qp.sObjectApiName;
         String whereClause = ' WHERE ParentId = \'' + currentParentId + '\'' + 'AND Id != \'' + currentRecord.Id + '\'';
-
+        system.debug('selectClause='+selectClause);
+        system.debug('fromClause='+fromClause);
+        system.debug('whereClause='+whereClause);
         siblings = performQuery(selectClause, fromClause, whereClause);
         system.debug('show siblings: ' + siblings);
 
