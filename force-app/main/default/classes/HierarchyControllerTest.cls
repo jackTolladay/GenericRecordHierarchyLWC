@@ -31,7 +31,7 @@ private class HierarchyControllerTest {
         queryParams.sObjectApiName = 'Account';
         queryParams.recordId = parentAccounts[0].Id;
         queryParams.parentFieldApiName = 'ParentId';
-        queryParams.fieldsToQuery = 'Id,Name,BillingCountry,Owner.Name,NumberOfEmployees';
+        queryParams.fieldsToQuery = 'Id,ParentId,Name,BillingCountry,Owner.Name,NumberOfEmployees';
         
         Test.startTest();
         HierarchyController.HierarchyWrapper result = HierarchyController.getAllRecordHierarchy(queryParams);
