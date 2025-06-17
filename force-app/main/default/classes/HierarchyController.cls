@@ -91,6 +91,7 @@
         List<SObject> combinedHierarchy = new List<SObject>();
 
         combinedHierarchy.addAll(getAncestorsFromLoadedRecord(currentRecord,qp));
+        combinedHierarchy.addAll(getSiblingsFromLoadedRecord(currentRecord,qp));
         combinedHierarchy.addAll(getDescendantsFromLoadedRecords(currentRecord,qp));
 		System.debug('combinedHierarchy' + combinedHierarchy);
         return combinedHierarchy;
@@ -127,6 +128,27 @@
         system.debug('show ancestors: ' + ancestors);
 
         return ancestors;
+    }
+
+        public static List<SObject> getSiblingsFromLoadedRecord(List<SObject> currentRecordList, QueryWrapper qp) {
+        List<SObject> siblings = new List<SObject>();
+
+        if (currentRecordList.isEmpty()) {
+            return siblings; // No record passed, return empty list
+        }
+
+        SObject currentRecord = currentRecordList[0];
+        Id currentParentId = (Id) currentRecord.get(qp.parentFieldApiName);
+        Integer depth = 0;
+
+        String selectClause = 'SELECT ' + qp.fieldsToQuery;
+        String fromClause = ' FROM ' + qp.sObjectApiName;
+        String whereClause = ' WHERE ParentId = \'' + currentParentId + '\'';
+
+        siblings = performQuery(selectClause, fromClause, whereClause);
+        system.debug('show siblings: ' + siblings);
+
+        return siblings;
     }
 
     public static List<SObject> getDescendantsFromLoadedRecords(List<SObject> currentRecordList, QueryWrapper qp) {
