@@ -68,7 +68,7 @@
      * @return List of sObject representing the fetched current record(s), empty if none found.
      */
     public static List<sObject> getCurrentRecord(QueryWrapper qp){
-        string selectClause = 'SELECT ' + qp.rootFieldApiName;
+        string selectClause = 'SELECT ' + qp.fieldsToQuery;
         string fromClause = ' FROM ' + qp.sObjectApiName;
         string whereClause = ' WHERE Id = \'' + qp.recordId + '\'';
         system.debug('selectClause='+selectClause);
