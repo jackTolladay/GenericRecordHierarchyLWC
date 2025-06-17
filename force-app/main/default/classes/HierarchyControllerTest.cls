@@ -44,8 +44,8 @@ private class HierarchyControllerTest {
     
     // Test the scenario with no children
     @isTest static void testHierarchyWithNoChildren() {
-        List<Account> currentAccount = getSoloAccounts();
-        Account testParent = parentAccounts[0];
+        List<Account> currentAccounts = getSoloAccounts();
+        Account currentAccount = currentAccounts[0];
         
         HierarchyController.QueryWrapper queryParams = new HierarchyController.QueryWrapper();
         queryParams.sObjectApiName = 'Account';
