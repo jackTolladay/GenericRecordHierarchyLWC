@@ -144,7 +144,7 @@
 
         String selectClause = 'SELECT ' + qp.fieldsToQuery;
         String fromClause = ' FROM ' + qp.sObjectApiName;
-        String whereClause = ' WHERE ParentId = \'' + currentParentId + '\'';
+        String whereClause = ' WHERE ParentId = \'' + currentParentId + '\'' + 'AND Id != \'' + currentRecordId + '\'';
 
         siblings = performQuery(selectClause, fromClause, whereClause);
         system.debug('show siblings: ' + siblings);
