@@ -153,7 +153,7 @@
         String whereClause = 'WHERE ' + qp.parentFieldApiName + ' IN (' + idListString + ')';
 
         List<SObject> children = performQuery(selectClause, fromClause, whereClause);
-
+        system.debug('show child records: ' + children);
         if (children.isEmpty()) break;
 
         descendants.addAll(children);
