@@ -51,6 +51,7 @@ private class HierarchyControllerTest {
         
         Test.startTest();
         HierarchyController.HierarchyWrapper result = HierarchyController.getAllRecordHierarchy(queryParams);
+        system.debug('results'+ result);
         System.Assert.isTrue(result.parentMap.keySet().size() == 1);
         System.Assert.isTrue(result.totalRecordCount == 1);
         Test.stopTest();
