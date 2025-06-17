@@ -59,7 +59,6 @@
         wrapper.parentMap = mapOfParentsWithListOfChild;
         wrapper.totalRecordCount = hierarchyRecords.size();
         wrapper.baseUrl = getBaseUrl();
-        system.debug('super parent list: ' + wrapper.superParentList);
         return wrapper; // Constructed hierarchy data
     }
     
@@ -138,14 +137,16 @@
         SObject currentRecord = currentRecordList[0];
         Id currentParentId = (Id) currentRecord.get(qp.parentFieldApiName);
 
-        String selectClause = 'SELECT ' + qp.fieldsToQuery;
-        String fromClause = ' FROM ' + qp.sObjectApiName;
-        String whereClause = ' WHERE ParentId = \'' + currentParentId + '\'' + 'AND Id != \'' + currentRecord.Id + '\'';
-        system.debug('selectClause='+selectClause);
-        system.debug('fromClause='+fromClause);
-        system.debug('whereClause='+whereClause);
-        siblings = performQuery(selectClause, fromClause, whereClause);
-        system.debug('show siblings: ' + siblings);
+        if(!currentParentId){
+            String selectClause = 'SELECT ' + qp.fieldsToQuery;
+            String fromClause = ' FROM ' + qp.sObjectApiName;
+            String whereClause = ' WHERE ParentId = \'' + currentParentId + '\'' + ' AND Id != \'' + currentRecord.Id + '\'';
+            system.debug('selectClause='+selectClause);
+            system.debug('fromClause='+fromClause);
+            system.debug('whereClause='+whereClause);
+            siblings = performQuery(selectClause, fromClause, whereClause);
+            system.debug('show siblings: ' + siblings);
+        }
 
         return siblings;
     }
