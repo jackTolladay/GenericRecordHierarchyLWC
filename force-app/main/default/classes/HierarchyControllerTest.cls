@@ -25,7 +25,7 @@ private class HierarchyControllerTest {
 
     // Helper method to get stored test records
     private static List<Account> getParentAccounts() {
-        return [SELECT Id, Description, ParentId FROM Account WHERE ParentId = ''];
+        return [SELECT Id, Description, ParentId FROM Account WHERE Name = 'Parent'];
     }
     
     // Test hierarchical data retrieval
