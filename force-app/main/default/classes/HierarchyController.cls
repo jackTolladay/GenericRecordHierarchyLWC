@@ -25,6 +25,7 @@
     public static HierarchyWrapper getAllRecordHierarchy(QueryWrapper queryParams){
         List<sObject> currentRecord = getCurrentRecord(queryParams); // Retrieves the starting (root) record based on query parameters
         List<sObject> hierarchyRecords = getHierarchyRecords(queryParams, currentRecord); // Fetches the complete set of records involved in the hierarchy
+        hierarchyRecords.addAll(currentRecord);
         return getAllHierarchy(hierarchyRecords, queryParams.parentFieldApiName); // Construct hierarchy structure
     }
     
@@ -58,6 +59,7 @@
         wrapper.parentMap = mapOfParentsWithListOfChild;
         wrapper.totalRecordCount = hierarchyRecords.size();
         wrapper.baseUrl = getBaseUrl();
+        system.debug('super parent list: ' + wrapper.superParentList);
         return wrapper; // Constructed hierarchy data
     }
     
@@ -90,7 +92,7 @@
 
         combinedHierarchy.addAll(getAncestorsFromLoadedRecord(currentRecord,qp));
         combinedHierarchy.addAll(getDescendantsFromLoadedRecords(currentRecord,qp));
-
+		System.debug('combinedHierarchy' + combinedHierarchy);
         return combinedHierarchy;
     }
     
@@ -108,7 +110,7 @@
         while (currentParentId != null && depth < MAX_HIERARCHY_DEPTH) {
             String selectClause = 'SELECT ' + qp.fieldsToQuery;
             String fromClause = ' FROM ' + qp.sObjectApiName;
-            String whereClause = ' WHERE ' + qp.parentFieldApiName + ' = \'' + currentParentId + '\'';
+            String whereClause = ' WHERE Id = \'' + currentParentId + '\'';
 
             List<SObject> parentList = performQuery(selectClause, fromClause, whereClause);
 
@@ -122,43 +124,51 @@
             currentParentId = (Id) parentRecord.get(qp.parentFieldApiName);
             depth++;
         }
+        system.debug('show ancestors: ' + ancestors);
 
         return ancestors;
     }
 
     public static List<SObject> getDescendantsFromLoadedRecords(List<SObject> currentRecordList, QueryWrapper qp) {
-        List<SObject> descendants = new List<SObject>();
-        Set<Id> parentIds = new Set<Id>();
+    List<SObject> descendants = new List<SObject>();
 
-        Id parentId = (Id) currentRecordList[0].get('Id');
+    if (currentRecordList.isEmpty()) return descendants;
 
+    Set<Id> parentIds = new Set<Id> {
+        (Id) currentRecordList[0].get('Id')
+    };
 
-        Integer depth = 0;
+    Integer depth = 0;
 
-        while (!parentIds.isEmpty() && depth < MAX_HIERARCHY_DEPTH) {
-            String selectClause = 'SELECT ' + qp.fieldsToQuery;
-            String fromClause = 'FROM ' + qp.sObjectApiName;
-            String whereClause = 'WHERE ' + qp.parentFieldApiName + ' = \'' + parentId + '\'';
-
-            List<SObject> children = performQuery(selectClause, fromClause, whereClause);
-
-            if (children.isEmpty()) {
-                break;
-            }
-
-            descendants.addAll(children);
-
-            parentIds.clear();
-            for (SObject child : children) {
-                parentIds.add((Id)child.get('Id'));
-            }
-
-            depth++;
+    while (!parentIds.isEmpty() && depth < MAX_HIERARCHY_DEPTH) {
+        // Convert Id set to a properly quoted, comma-separated string
+        List<String> idStrings = new List<String>();
+        for (Id pid : parentIds) {
+            idStrings.add('\'' + String.valueOf(pid) + '\'');
         }
-        system.debug('show decendants: ' + descendants);
-        return descendants;
-    }
 
+        String idListString = String.join(idStrings, ', ');
+        String selectClause = 'SELECT ' + qp.fieldsToQuery;
+        String fromClause = 'FROM ' + qp.sObjectApiName;
+        String whereClause = 'WHERE ' + qp.parentFieldApiName + ' IN (' + idListString + ')';
+
+        List<SObject> children = performQuery(selectClause, fromClause, whereClause);
+
+        if (children.isEmpty()) break;
+
+        descendants.addAll(children);
+
+        // Prepare for next level
+        parentIds.clear();
+        for (SObject child : children) {
+            parentIds.add((Id) child.get('Id'));
+        }
+
+        depth++;
+    }
+    system.debug('descendants' + descendants);
+    return descendants;
+}
 
 
     /**
@@ -174,7 +184,9 @@
         String selectClause = 'SELECT ' + String.join(customMetadataFields, ',');
         String fromClause = ' FROM ' + customMedataName;
         String whereClause = ' WHERE MasterLabel = \'' + templateName + '\'';
-
+        system.debug('metaselectClause='+selectClause);
+        system.debug('metafromClause='+fromClause);
+        system.debug('metawhereClause='+whereClause);
         mdtaRecords = performQuery(selectClause, fromClause, whereClause); // Query to fetch Custom metadata records
         return mdtaRecords <> NULL && !mdtaRecords.isEmpty() ? mdtaRecords[0] : NULL;
     }
