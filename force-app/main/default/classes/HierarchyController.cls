@@ -137,7 +137,7 @@
         SObject currentRecord = currentRecordList[0];
         Id currentParentId = (Id) currentRecord.get(qp.parentFieldApiName);
 
-        if(!currentParentId){
+        if(currentRecord.get(qp.parentFieldApiName) != null){
             String selectClause = 'SELECT ' + qp.fieldsToQuery;
             String fromClause = ' FROM ' + qp.sObjectApiName;
             String whereClause = ' WHERE ParentId = \'' + currentParentId + '\'' + ' AND Id != \'' + currentRecord.Id + '\'';
