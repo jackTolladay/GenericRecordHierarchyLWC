@@ -155,7 +155,7 @@
 
             depth++;
         }
-
+        system.debug('show decendants: ' + descendants);
         return descendants;
     }
 

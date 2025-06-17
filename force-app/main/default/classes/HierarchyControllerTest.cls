@@ -52,11 +52,10 @@ private class HierarchyControllerTest {
         Test.startTest();
         HierarchyController.HierarchyWrapper result = HierarchyController.getAllRecordHierarchy(queryParams);
         system.debug('results'+ result);
+        //There should be no hierarchy records as there is only a standalone account
         System.Assert.isTrue(result.parentMap.keySet().size() == 0);
-
-        // Assert the parent record is returned
-        System.Assert.isTrue(result.superParentList.size() == 1);
-        System.Assert.isTrue(result.totalRecordCount == 1);
+        System.Assert.isTrue(result.superParentList.size() == 0);
+        System.Assert.isTrue(result.totalRecordCount == 0);
         Test.stopTest();
     }
     
