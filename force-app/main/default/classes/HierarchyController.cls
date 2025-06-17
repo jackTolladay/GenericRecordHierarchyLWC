@@ -150,8 +150,8 @@
         String idListString = String.join(idStrings, ', ');
         system.debug('idListString ' + idListString);
         String selectClause = 'SELECT ' + qp.fieldsToQuery;
-        String fromClause = 'FROM ' + qp.sObjectApiName;
-        String whereClause = 'WHERE ' + qp.parentFieldApiName + ' IN (' + idListString + ')';
+        String fromClause = ' FROM ' + qp.sObjectApiName;
+        String whereClause = ' WHERE ' + qp.parentFieldApiName + ' IN (' + idListString + ')';
 
         List<SObject> children = performQuery(selectClause, fromClause, whereClause);
         system.debug('show child records: ' + children);
