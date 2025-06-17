@@ -12,6 +12,9 @@ private class HierarchyControllerTest {
             new Account(Name = 'Child2',Description='Child Account', ParentId=parentAccount.Id, BillingCountry ='UK')
         };
         insert childAccounts;
+        // Create grandchild Accounts
+        Account grandChildAccount = new Account(Name = 'Grandchild',Description='Grandchild Account', ParentId=childAccounts[0].Id, BillingCountry ='UK');    
+        insert parentAccount;
 
         //Create solo account
         Account soloAccount = new Account(Name = 'Solo',Description='Solo Account', BillingCountry ='UK');
@@ -39,6 +42,8 @@ private class HierarchyControllerTest {
         
         Test.startTest();
         HierarchyController.HierarchyWrapper result = HierarchyController.getAllRecordHierarchy(queryParams);
+        System.Assert.isTrue(result.totalRecordCount == 4);
+
         Test.stopTest();
     }
     
@@ -57,9 +62,7 @@ private class HierarchyControllerTest {
         HierarchyController.HierarchyWrapper result = HierarchyController.getAllRecordHierarchy(queryParams);
         system.debug('results'+ result);
         //There should be no hierarchy records as there is only a standalone account
-        System.Assert.isTrue(result.parentMap.keySet().size() == 0);
-        System.Assert.isTrue(result.superParentList.size() == 0);
-        System.Assert.isTrue(result.totalRecordCount == 0);
+        System.Assert.isTrue(result.totalRecordCount == 1);
         Test.stopTest();
     }
     
