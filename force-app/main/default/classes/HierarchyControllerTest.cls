@@ -21,14 +21,16 @@ private class HierarchyControllerTest {
         insert soloAccount;
     }
     
-    // Helper method to get stored test records
     private static List<Account> getSoloAccounts() {
         return [SELECT Id, Description, ParentId FROM Account WHERE Name = 'Solo'];
     }
 
-    // Helper method to get stored test records
     private static List<Account> getParentAccounts() {
         return [SELECT Id, Description, ParentId FROM Account WHERE Name = 'Parent'];
+    }
+
+    private static List<Account> getChildAccounts() {
+        return [SELECT Id, Description, ParentId FROM Account WHERE Name = 'Child1'];
     }
     
     // Test hierarchical data retrieval
@@ -43,7 +45,6 @@ private class HierarchyControllerTest {
         Test.startTest();
         HierarchyController.HierarchyWrapper result = HierarchyController.getAllRecordHierarchy(queryParams);
         System.Assert.isTrue(result.totalRecordCount == 4);
-
         Test.stopTest();
     }
     
@@ -66,6 +67,20 @@ private class HierarchyControllerTest {
         Test.stopTest();
     }
     
+        // Test hierarchical data retrieval
+    @isTest static void testHierarchyFromMiddle() {
+        List<Account> childAccounts = getChildAccounts();
+        HierarchyController.QueryWrapper queryParams = new HierarchyController.QueryWrapper();
+        queryParams.sObjectApiName = 'Account';
+        queryParams.recordId = childAccounts[0].Id;
+        queryParams.parentFieldApiName = 'ParentId';
+        queryParams.fieldsToQuery = 'Id,ParentId,Name,BillingCountry,Owner.Name,NumberOfEmployees';
+        
+        Test.startTest();
+        HierarchyController.HierarchyWrapper result = HierarchyController.getAllRecordHierarchy(queryParams);
+        System.Assert.isTrue(result.totalRecordCount == 4);
+        Test.stopTest();
+    }
     @isTest static void testGetCustomMetadata(){
         Test.startTest();
         sObject mdta = HierarchyController.getCustomMetadata('Data_table_Tree_Grid_Configuration__mdt');
