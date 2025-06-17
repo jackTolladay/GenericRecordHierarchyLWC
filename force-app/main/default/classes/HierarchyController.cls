@@ -132,7 +132,8 @@
 
         public static List<SObject> getSiblingsFromLoadedRecord(List<SObject> currentRecordList, QueryWrapper qp) {
         List<SObject> siblings = new List<SObject>();
-
+        system.debug('entered siblings, currentRecordList: ' + currentRecordList);
+        system.debug('qp: ' + qp);
         if (currentRecordList.isEmpty()) {
             return siblings; // No record passed, return empty list
         }
