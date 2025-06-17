@@ -52,7 +52,10 @@ private class HierarchyControllerTest {
         Test.startTest();
         HierarchyController.HierarchyWrapper result = HierarchyController.getAllRecordHierarchy(queryParams);
         system.debug('results'+ result);
-        System.Assert.isTrue(result.parentMap.keySet().size() == 1);
+        System.Assert.isTrue(result.parentMap.keySet().size() == 0);
+
+        // Assert the parent record is returned
+        System.Assert.isTrue(result.superParentList.size() == 1);
         System.Assert.isTrue(result.totalRecordCount == 1);
         Test.stopTest();
     }
