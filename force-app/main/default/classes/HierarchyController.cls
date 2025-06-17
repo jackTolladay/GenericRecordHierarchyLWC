@@ -148,6 +148,7 @@
         }
 
         String idListString = String.join(idStrings, ', ');
+        system.debug('idListString ' + idListString);
         String selectClause = 'SELECT ' + qp.fieldsToQuery;
         String fromClause = 'FROM ' + qp.sObjectApiName;
         String whereClause = 'WHERE ' + qp.parentFieldApiName + ' IN (' + idListString + ')';
@@ -221,6 +222,7 @@
      */
     public static List<sObject> performQuery(string selectClause, string fromClause, string whereClause) {
         String queryString = selectClause + fromClause + whereClause;
+        system.debug('query ' + queryString);
         return Database.query(queryString);
     }
      
