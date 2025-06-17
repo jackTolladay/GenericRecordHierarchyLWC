@@ -88,8 +88,8 @@
 
         List<SObject> combinedHierarchy = new List<SObject>();
 
-        combinedHierarchy.addAll(getAncestorsFromLoadedRecord(qp, currentRecordList));
-        combinedHierarchy.addAll(getDescendantsFromLoadedRecords(qp, currentRecordList));
+        combinedHierarchy.addAll(getAncestorsFromLoadedRecord(qp, currentRecord));
+        combinedHierarchy.addAll(getDescendantsFromLoadedRecords(qp, currentRecord));
 
         return combinedHierarchy;
     }
