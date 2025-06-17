@@ -31,7 +31,7 @@
     /**
      * Organizes given list of sObjects into a hierarchy structure based on a parent field API name.
      *
-     * @param recordList List of sObject which represents the queried records that will be structured into hierarchy
+     * @param hierarchyRecords List of sObject which represents the queried records that will be structured into hierarchy
      * @param parentFieldApiName The API name of the field used to identify parent-child relationships
      * @return HierarchyWrapper with structured data detailing parents, children, and the overall count
      */
