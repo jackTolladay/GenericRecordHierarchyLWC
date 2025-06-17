@@ -36,11 +36,11 @@
      * @return HierarchyWrapper with structured data detailing parents, children, and the overall count
      */
     @AuraEnabled
-    public static HierarchyWrapper getAllHierarchy(List<sObject> recordList, String parentFieldApiName){
+    public static HierarchyWrapper getAllHierarchy(List<sObject> hierarchyRecords, String parentFieldApiName){
         Map<String, List<sObject>> mapOfParentsWithListOfChild = new Map<String, List<sObject>>();
         List<sObject> parentList = new List<sObject>();
 
-        for(sObject record : recordList) {
+        for(sObject record : hierarchyRecords) {
             if(record.get(parentFieldApiName) != null){
                 String parentKey = (String)record.get(parentFieldApiName);
                 if(mapOfParentsWithListOfChild.containsKey(parentKey)){
@@ -56,7 +56,7 @@
         HierarchyWrapper wrapper = new HierarchyWrapper();
         wrapper.superParentList = parentList;
         wrapper.parentMap = mapOfParentsWithListOfChild;
-        wrapper.totalRecordCount = recordList.size();
+        wrapper.totalRecordCount = hierarchyRecords.size();
         wrapper.baseUrl = getBaseUrl();
         return wrapper; // Constructed hierarchy data
     }
