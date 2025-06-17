@@ -14,7 +14,7 @@ private class HierarchyControllerTest {
         insert childAccounts;
         // Create grandchild Accounts
         Account grandChildAccount = new Account(Name = 'Grandchild',Description='Grandchild Account', ParentId=childAccounts[0].Id, BillingCountry ='UK');    
-        insert parentAccount;
+        insert grandChildAccount;
 
         //Create solo account
         Account soloAccount = new Account(Name = 'Solo',Description='Solo Account', BillingCountry ='UK');
